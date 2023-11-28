@@ -51,9 +51,9 @@
 - name: "Client"
   description: See https://miro.com/app/board/uXjVNZ03E-c=/ for details
   color: D88B3E
-- name: "Marketplace"
-  description: See https://miro.com/app/board/uXjVNZ03E-c=/ for details
-  color: D8AC3E
+# - name: "Marketplace"
+#   description: See https://miro.com/app/board/uXjVNZ03E-c=/ for details
+#   color: D8AC3E
 - name: "Infrastructure"
   description: See https://miro.com/app/board/uXjVNZ03E-c=/ for details
   color: D8D53E  
