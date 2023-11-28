@@ -2,7 +2,7 @@ name: Add Label to Issues
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   add-label:
