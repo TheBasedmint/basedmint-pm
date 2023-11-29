@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timedelta
 
 # Assuming your JSON data is stored in a file named 'data.json'
-with open('data-nim-codex.json', 'r') as file:
+with open('data-basedmint.json', 'r') as file:
     events = json.load(file)
 
 # Calculate the datetime 48 hours ago from now
@@ -42,5 +42,5 @@ for event in events:
 filtered_data = list(unique_issues.values())
 
 # Write the filtered data to a new JSON file
-with open('filtered_data.json', 'w') as output_file:
-    json.dump(filtered_data, output_file, indent=2)
+with open('filtered__basedmint_data.json', 'w') as output_file:
+    json.dump(filtered_basedmint_data, output_file, indent=2)

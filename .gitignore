@@ -4,3 +4,8 @@
 # .github/workflows/add-labels-to-issues.yml
 # .github/workflows/sync-labels.yml
 # .github/workflows/add-action-project.yml
+.github/scripts/data-basedmint.json
+.github/scripts/data-nim-codex.json
+.github/scripts/data-test1.json
+.github/scripts/filtered__basedmint_data.json
+.github/scripts/filtered_data.json
