@@ -1,0 +1,27 @@
+name: Restore Labels
+
+on:
+  label:
+    types:
+      - deleted
+
+jobs:
+  restore-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Restore Labels
+        run: |
+          # Define the repository name
+          REPO_NAME=basedmint-pm  # Change this to your repository name
+
+          # Restore labels (replace 'label1', 'label2', etc., with your actual label names)
+          gh label create -R $REPO_NAME 'label1' --color 'hex_color' --description 'Label description'
+          gh label create -R $REPO_NAME 'label2' --color 'hex_color' --description 'Label description'
+          # Add more lines for each label you want to restore
+
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_LABELS2 }}
