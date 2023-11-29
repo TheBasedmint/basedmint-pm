@@ -14,11 +14,11 @@ jobs:
         ORG_NAME="TheBasedmint"
         LABEL_NAME="Marketplace"  # Replace with the label name you want to retrieve
 
-        # Fetch all events related to label deletions in the past 48 hours
+        # Fetch closed issues related to label deletions in the past 48 hours
         label_events=$(curl -s -H "Authorization: Bearer $TOKEN" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg LABEL_NAME "$LABEL_NAME" \
-          '.[] | select(.type == "DeleteEvent" and .payload.label.name == $LABEL_NAME) | "\(.repo.name),\(.actor.login),\(.payload.label.name),\(.created_at | strflocaltime("%Y-%m-%d %H:%M:%S"))"')
+          "https://api.github.com/orgs/$ORG_NAME/issues?per_page=100" | jq -r --arg LABEL_NAME "$LABEL_NAME" \
+          '.[] | select(.labels[].name == $LABEL_NAME and .state == "closed") | "\(.repository.name),\(.user.login),\(.labels[].name),\(.closed_at | strflocaltime("%Y-%m-%d %H:%M:%S"))"')
 
         # Print label events
         echo "Label Events:"
