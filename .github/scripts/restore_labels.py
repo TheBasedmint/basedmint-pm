@@ -45,8 +45,7 @@ for repository in repositories:
 
     if events:
         # Save events to a JSON file for each repository
-        filename = f"{repository}_issue_events.json"
-        with open(filename, "w") as file:
+        with open(f"{repository}_issue_events.json", "w") as file:
             json.dump(events, file)
 
         # Restore labels based on deletion events for each repository
@@ -56,8 +55,4 @@ for repository in repositories:
                 # Restore the label using your preferred method (GitHub API, gh CLI, etc.)
                 print(f"Restoring label: {label_name} in {repository}")
                 # Add logic here to restore the label using the GitHub API or other methods
-
-        # Upload the JSON file as an artifact for each repository
-        os.system(f'echo "::set-output name=artifacts::{filename}"')
-
     print("\n")
