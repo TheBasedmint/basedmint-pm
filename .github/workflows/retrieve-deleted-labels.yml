@@ -70,14 +70,14 @@ jobs:
         '
 
         # Fetch label removal events using GraphQL
-        label_events=$(curl -s -X POST -H "Authorization: Bearer $TOKEN" \
+        label_events=$(curl -v -s -X POST -H "Authorization: Bearer $TOKEN" \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -d '{"query":"'$query'"}' \
-          "https://api.github.com/graphql" | jq -r '.data.organization.auditLog.edges | .[].node')
+          "https://api.github.com/graphql" | jq -r '.')
 
         # Print label events
-        echo "Label Events:"
+        echo "GraphQL Response:"
         echo "$label_events"
 
         # Save retrieved label info
