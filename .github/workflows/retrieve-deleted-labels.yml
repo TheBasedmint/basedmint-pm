@@ -5,12 +5,13 @@ on:
 jobs:
   retrieve-deleted-label:
     runs-on: ubuntu-latest
+    outputs:
+      id: deleted-label-info
+      value: ${{ steps.print-label-info.outputs.deleted_label_info }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Retrieve deleted label info
+      id: print-label-info
       run: |
         TOKEN=${{ secrets.SYNC_LABELS2 }}
         ORG_NAME="TheBasedmint"
@@ -22,11 +23,14 @@ jobs:
           "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg LABEL_NAME "$LABEL_NAME" \
           '.[] | select(.type == "DeleteEvent" and .payload.label.name == $LABEL_NAME) | "\(.repo.name),\(.actor.login),\(.created_at | strflocaltime("%Y-%m-%d %H:%M:%S"))"')
 
-        # Print retrieved label info
-        echo "$deleted_label_info" > deleted_label_info.txt
+        # Set output variable
+        echo "deleted_label_info=$deleted_label_info" >> $GITHUB_ENV
 
-    - name: Save retrieved label info as artifact
-      uses: actions/upload-artifact@v2
+    - name: Output label info
+      run: echo "deleted_label_info=${{ steps.print-label-info.outputs.deleted_label_info }}"
+
+    - name: Upload deleted-label-info as artifact
+      uses: actions/upload-artifact@v4
       with:
         name: deleted-label-info
-        path: deleted_label_info.txt
+        path: deleted-label-info.txt
