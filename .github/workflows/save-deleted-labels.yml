@@ -20,13 +20,14 @@ jobs:
       run: |
         TOKEN=${{ secrets.SYNC_LABELS2 }}
         TIMESTAMP=$(date -d "2 days ago" --utc +%Y-%m-%dT%H:%M:%SZ)
-        ORG_NAME="TheBasedmint"
+        ORG_NAME="TheBasedmint"  # Replace with your actual organization name
+        REPO_NAME="test1"            # Replace with your actual repository name
         TARGET_USER="JessieBroke"
 
         # Fetch all events related to label deletions by JessieBroke in the past 48 hours
         deleted_labels=$(curl -s -H "Authorization: Bearer $TOKEN" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg TIMESTAMP "$TIMESTAMP" --arg TARGET_USER "$TARGET_USER" \
+          "https://api.github.com/repos/$ORG_NAME/$REPO_NAME/events?per_page=100" | jq -r --arg TIMESTAMP "$TIMESTAMP" --arg TARGET_USER "$TARGET_USER" \
           '.[] | select(.type == "DeleteEvent" and .created_at >= $TIMESTAMP and .actor.login == $TARGET_USER) | .repo.name + "," + .payload.label.name')
 
         # Debug: Print values
