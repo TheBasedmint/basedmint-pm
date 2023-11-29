@@ -48,8 +48,8 @@ if __name__ == "__main__":
         events = fetch_issue_events(username, organization, repository, token)
 
         if events:
-            # Save events to a JSON file for each repository
-            filename = f"{repository}_issue_events.json"
+            # Save events to a JSON file for each repository in the output directory
+            filename = f"output/{repository}_issue_events.json"
             with open(filename, "w") as file:
                 json.dump(events, file)
 
@@ -61,8 +61,4 @@ if __name__ == "__main__":
                     print(f"Restoring label: {label_name} in {repository}")
                     # Add logic here to restore the label using the GitHub API or other methods
 
-            # Upload the JSON file as an artifact for each repository
-            os.system(f'echo "::set-output name=artifacts::{filename}"')
-            os.system(f'echo "::set-output name=artifact_paths::{filename}"')
-
-        print("\n")
+    print("\n")

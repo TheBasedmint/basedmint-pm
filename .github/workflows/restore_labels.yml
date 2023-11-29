@@ -1,12 +1,13 @@
-name: Restore Labels
+name: Restore Labels Workflow
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   restore-labels:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -14,30 +15,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.8
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Restore Labels
-        run: |
-          python .github/scripts/restore_labels.py
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        working-directory: ${{ github.workspace }}
-
-    #   - name: Upload issue events as artifact
-    #     uses: actions/upload-artifact@v2
-    #     with:
-    #       name: issue-events
-    #       path: issue_events.json
+      - name: Run restore_labels.py
+        run: python .github/scripts/restore_labels.py
 
       - name: Upload issue events as artifact
         uses: actions/upload-artifact@v2
         with:
           name: issue-events
-          path: "${{ runner.workspace }}/*.json"
+          path: output/*.json
           if-no-files-found: warn
-                  
