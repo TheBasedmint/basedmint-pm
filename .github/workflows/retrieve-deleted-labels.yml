@@ -24,18 +24,15 @@ jobs:
         echo "Label Events:"
         echo "$label_events"
 
-        # Print retrieved label info
-        deleted_label_info=$(echo "$label_events" | jq -r '"\(.repo.name),\(.actor.login),\(.created_at | strflocaltime("%Y-%m-%d %H:%M:%S"))"')
-        echo "Deleted Label Info: $deleted_label_info"
-
         # Print current working directory
         echo "Current Working Directory: $(pwd)"
 
+        # Save retrieved label info
+        deleted_label_info=$(echo "$label_events" | jq -r '"\(.repo.name),\(.actor.login),\(.created_at | strflocaltime("%Y-%m-%d %H:%M:%S"))"')
+        echo "Deleted Label Info: $deleted_label_info" > deleted-label-info.txt
+
         # Print the contents of the file
         cat deleted-label-info.txt
-
-        # Save retrieved label info
-        echo "$deleted_label_info" > deleted-label-info.txt
 
     - name: Output label info
       run: echo "deleted_label_info=${{ steps.print-label-info.outputs.deleted_label_info }}"
