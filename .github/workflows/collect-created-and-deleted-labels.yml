@@ -1,0 +1,29 @@
+name: Collect Missing/Deleted Labels
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  collect-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Collect missing/deleted labels
+      run: |
+        TOKEN=${{ secrets.SYNC_LABELS2 }}
+        TIMESTAMP=$(date -d "2 days ago" --utc +%Y-%m-%dT%H:%M:%SZ)
+        ORG_NAME="TheBasedmint"
+
+        # Fetch all events related to label deletions and creations in the past 48 hours
+        events=$(curl -s -H "Authorization: Bearer $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg TIMESTAMP "$TIMESTAMP" \
+          '.[] | select((.type == "LabelEvent" or .type == "DeleteEvent") and .created_at >= $TIMESTAMP) | .repo.name + "," + .payload.label.name')
+
+        # Create a unique list of labels
+        unique_labels=$(echo "$events" | sort -u)
+
+        # Save the labels to labels.yml
+        echo "$unique_labels" > deleted-labels.yml

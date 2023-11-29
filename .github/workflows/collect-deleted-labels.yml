@@ -1,0 +1,30 @@
+name: Collect Deleted Labels by JessieBroke
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  collect-deleted-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Collect deleted labels by JessieBroke
+      run: |
+        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        TIMESTAMP=$(date -d "2 days ago" --utc +%Y-%m-%dT%H:%M:%SZ)
+        ORG_NAME="TheBasedmint"
+        TARGET_USER="JessieBroke"
+
+        # Fetch all events related to label deletions by JessieBroke in the past 48 hours
+        deleted_labels=$(curl -s -H "Authorization: Bearer $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg TIMESTAMP "$TIMESTAMP" --arg TARGET_USER "$TARGET_USER" \
+          '.[] | select(.type == "DeleteEvent" and .created_at >= $TIMESTAMP and .actor.login == $TARGET_USER) | .repo.name + "," + .payload.label.name')
+
+        # Create a unique list of deleted labels
+        unique_deleted_labels=$(echo "$deleted_labels" | sort -u)
+
+        # Save the deleted labels to deleted_labels.yml
+        echo "$unique_deleted_labels" > deleted_labels.yml
