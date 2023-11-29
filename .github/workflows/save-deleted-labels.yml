@@ -3,14 +3,14 @@ on:
   workflow_dispatch:  # Manual trigger
 
 jobs:
-  collect-deleted-labels:
+  save-deleted-labels:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Collect deleted labels by JessieBroke
+    - name: Save deleted labels by JessieBroke
       run: |
         TOKEN=${{ secrets.SYNC_LABELS2 }}
         TIMESTAMP=$(date -d "2 days ago" --utc +%Y-%m-%dT%H:%M:%SZ)
@@ -23,11 +23,18 @@ jobs:
           "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg TIMESTAMP "$TIMESTAMP" --arg TARGET_USER "$TARGET_USER" \
           '.[] | select(.type == "DeleteEvent" and .created_at >= $TIMESTAMP and .actor.login == $TARGET_USER) | .repo.name + "," + .payload.label.name')
 
+        # Debug: Print values
+        echo "Deleted Labels: $deleted_labels"
+        echo "Current Working Directory: $(pwd)"
+
         # Create a unique list of deleted labels
         unique_deleted_labels=$(echo "$deleted_labels" | sort -u)
 
         # Save the deleted labels to a file
         echo "$unique_deleted_labels" > deleted_labels.yml
+
+        # Debug: Print file content
+        cat deleted_labels.yml
 
     - name: Upload deleted_labels.yml as an artifact
       uses: actions/upload-artifact@v2
