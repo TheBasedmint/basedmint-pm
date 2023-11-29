@@ -28,8 +28,16 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
         working-directory: ${{ github.workspace }}
 
+    #   - name: Upload issue events as artifact
+    #     uses: actions/upload-artifact@v2
+    #     with:
+    #       name: issue-events
+    #       path: issue_events.json
+
       - name: Upload issue events as artifact
         uses: actions/upload-artifact@v2
         with:
           name: issue-events
-          path: issue_events.json
+          path: "${{ runner.workspace }}/*.json"
+          if-no-files-found: warn
+                  
