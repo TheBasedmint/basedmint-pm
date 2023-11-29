@@ -1,0 +1,6 @@
+# .gitignore
+
+# Ignore specific GitHub Actions workflow files
+.github/workflows/add-labels-to-issues.yml
+.github/workflows/sync-labels.yml
+.github/workflows/add-action-project.yml
