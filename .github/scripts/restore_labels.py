@@ -5,7 +5,7 @@ import json
 # Replace with your GitHub username, organization, repository, and personal access token
 username = "JessieBroke"
 organization = "TheBasedmint"
-repository = "basedmint-pm"
+repository = "test1"
 token = os.getenv("GH_PAT")
 
 # GitHub API endpoint for listing issue events
