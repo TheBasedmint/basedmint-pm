@@ -13,8 +13,8 @@ jobs:
     - name: Retrieve deleted label info
       run: |
         TOKEN=${{ secrets.SYNC_LABELS2 }}
-        ORG_NAME="YourOrganization"  # Replace with your actual organization name
-        LABEL_NAME="Marketplace"     # Replace with the label name you want to retrieve
+        ORG_NAME="TheBasedmint"
+        LABEL_NAME="Marketplace"  # Replace with the label name you want to retrieve
 
         # Fetch all events related to label deletions in the past 48 hours
         deleted_label_info=$(curl -s -H "Authorization: Bearer $TOKEN" \
@@ -24,7 +24,7 @@ jobs:
 
         # Print retrieved label info
         echo "Deleted Label Info:"
-        echo "$deleted_label_info"
+        echo "$deleted_label_info" > deleted_label_info.txt
 
     - name: Save retrieved label info as artifact
       uses: actions/upload-artifact@v2
