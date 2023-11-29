@@ -1,0 +1,33 @@
+name: Retrieve Deleted Label Info
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  retrieve-deleted-label:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Retrieve deleted label info
+      run: |
+        TOKEN=${{ secrets.SYNC_LABELS2 }}
+        ORG_NAME="YourOrganization"  # Replace with your actual organization name
+        LABEL_NAME="Marketplace"     # Replace with the label name you want to retrieve
+
+        # Fetch all events related to label deletions in the past 48 hours
+        deleted_label_info=$(curl -s -H "Authorization: Bearer $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/orgs/$ORG_NAME/events?per_page=100" | jq -r --arg LABEL_NAME "$LABEL_NAME" \
+          '.[] | select(.type == "DeleteEvent" and .payload.label.name == $LABEL_NAME) | .repo.name + "," + .actor.login + "," + (.created_at | strflocaltime("%Y-%m-%d %H:%M:%S"))')
+
+        # Print retrieved label info
+        echo "Deleted Label Info:"
+        echo "$deleted_label_info"
+
+    - name: Save retrieved label info as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: deleted-label-info
+        path: deleted_label_info.txt
