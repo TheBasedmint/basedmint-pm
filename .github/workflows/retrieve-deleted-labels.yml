@@ -14,11 +14,67 @@ jobs:
         ORG_NAME="TheBasedmint"
         LABEL_NAME="Marketplace"  # Replace with the label name you want to retrieve
 
-        # Fetch closed issues related to label deletions in the past 48 hours
-        label_events=$(curl -s -H "Authorization: Bearer $TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/$ORG_NAME/issues?per_page=100" | jq -r --arg LABEL_NAME "$LABEL_NAME" \
-          '.[] | select(.labels[].name == $LABEL_NAME and .state == "closed") | "\(.repository.name),\(.user.login),\(.labels[].name),\(.closed_at | strflocaltime("%Y-%m-%d %H:%M:%S"))"')
+        # GraphQL query to fetch label removal events
+        query='
+          query {
+            organization(login: "'$ORG_NAME'") {
+              auditLog(userLogin: "'$LABEL_NAME'", first: 10) {
+                edges {
+                  node {
+                    ... on OrgRemoveMemberAuditEntry {
+                      createdAt
+                      actor {
+                        login
+                      }
+                      ... on OrgRemoveMemberAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                      ... on OrgRemoveOutsideCollaboratorAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                      ... on OrgRemoveOutsideCollaboratorAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                      ... on OrgRemoveBillingManagerAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                      ... on OrgRemoveOutsideCollaboratorAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                      ... on OrgRemoveOutsideCollaboratorAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                      ... on OrgRemoveOutsideCollaboratorAuditEntry {
+                        actor {
+                          login
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        '
+
+        # Fetch label removal events using GraphQL
+        label_events=$(curl -s -X POST -H "Authorization: Bearer $TOKEN" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -d '{"query":"'$query'"}' \
+          "https://api.github.com/graphql" | jq -r '.data.organization.auditLog.edges | .[].node')
 
         # Print label events
         echo "Label Events:"
