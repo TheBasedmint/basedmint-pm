@@ -1,4 +1,4 @@
-name: Collect Deleted Labels by JessieBroke
+name: Save Deleted Labels by JessieBroke
 on:
   workflow_dispatch:  # Manual trigger
 
