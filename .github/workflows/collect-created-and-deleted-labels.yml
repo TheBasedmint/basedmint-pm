@@ -27,3 +27,6 @@ jobs:
 
         # Save the labels to labels.yml
         echo "$unique_labels" > deleted-labels.yml
+
+        # Print deleted labels to the workflow logs
+        cat deleted-labels.yml
