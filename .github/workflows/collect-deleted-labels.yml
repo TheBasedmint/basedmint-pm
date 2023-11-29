@@ -12,7 +12,7 @@ jobs:
 
     - name: Collect deleted labels by JessieBroke
       run: |
-        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        TOKEN=${{ secrets.SYNC_LABELS2 }}
         TIMESTAMP=$(date -d "2 days ago" --utc +%Y-%m-%dT%H:%M:%SZ)
         ORG_NAME="TheBasedmint"
         TARGET_USER="JessieBroke"
@@ -28,3 +28,6 @@ jobs:
 
         # Save the deleted labels to deleted_labels.yml
         echo "$unique_deleted_labels" > deleted_labels.yml
+
+        # Print deleted labels to the workflow logs
+        cat deleted_labels.yml
