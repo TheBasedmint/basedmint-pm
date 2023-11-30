@@ -1,7 +1,9 @@
 name: Restore Labels
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # Replace with your main branch name
 
 jobs:
   restore-labels:
@@ -32,4 +34,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: issue-events
-          path: issue_events.json
+          path: output/*.json
+          if-no-files-found: warn
