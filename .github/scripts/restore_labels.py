@@ -15,13 +15,8 @@ api_url = f"https://api.github.com/repos/{organization}/{repository}/issues/even
 response = requests.get(api_url, headers={"Authorization": f"Bearer {token}"})
 events = response.json()
 
-# Create the output directory if it doesn't exist
-output_dir = "output"
-os.makedirs(output_dir, exist_ok=True)
-
-# Save events to a JSON file in the output directory
-filename = os.path.join(output_dir, "issue_events.json")
-with open(filename, "w") as file:
+# Save events to a JSON file
+with open("issue_events.json", "w") as file:
     json.dump(events, file)
 
 # Restore labels based on deletion events
