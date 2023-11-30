@@ -3,10 +3,10 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-# Replace with your GitHub username, organization, repository, and personal access token
+# Replace with your GitHub username, organization, repositories, and personal access token
 username = "JessieBroke"
 organization = "TheBasedmint"
-repositories = ["test1", "test2"]  # Add other repositories as needed
+repositories = ["test1", "test2"]
 token = os.getenv("GH_PAT")
 
 # Calculate the datetime 48 hours ago from now
