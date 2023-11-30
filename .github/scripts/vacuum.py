@@ -3,11 +3,20 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-# Replace with your GitHub username, organization, repositories, and personal access token
+# Replace with your GitHub username, organization, and personal access token
 username = "JessieBroke"
 organization = "TheBasedmint"
-repositories = ["test1", "test2"]
 token = os.getenv("GH_PAT")
+
+# GitHub API endpoint for listing repositories in the organization
+repositories_url = f"https://api.github.com/orgs/{organization}/repos"
+
+# Fetch repositories
+response = requests.get(repositories_url, headers={"Authorization": f"Bearer {token}"})
+repositories_data = response.json()
+
+# Extract repository names from the response
+repositories = [repo["name"] for repo in repositories_data]
 
 # Calculate the datetime 48 hours ago from now
 time_threshold = datetime.utcnow() - timedelta(hours=48)
