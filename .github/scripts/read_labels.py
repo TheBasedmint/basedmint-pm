@@ -8,7 +8,7 @@ def load_labels_yaml(filename):
 
 def get_github_token():
     # Ensure you have a GitHub token set as a secret in your repository
-    return os.environ.get("GITHUB_TOKEN")
+    return os.environ.get("GH_PAT")
 
 def read_labels(repo, issue_number, labels):
     headers = {
