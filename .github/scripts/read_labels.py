@@ -40,18 +40,29 @@ def main():
         # Fetch all issues in the repository
         issues_url = f"https://api.github.com/repos/{organization}/{repo}/issues"
         issues_response = requests.get(issues_url, headers={"Authorization": f"Bearer {get_github_token()}"})
-        issues = issues_response.json()
+        
+        if issues_response.status_code == 200:
+            issues = issues_response.json()
 
-        # Iterate through issues and re-add labels
-        for issue in issues:
-            issue_number = issue['number']
+            # Iterate through issues and re-add labels
+            for issue in issues:
+                try:
+                    issue_number = issue['number']
+                    print(f"Issue #{issue_number} in repo {repo}")
+                    
+                    # Extract removed labels from the issue if available
+                    removed_labels = [label['name'] for label in issue.get('labels', []) if label['name'].lower() in (label_data['name'].lower() for label_data in labels_data)]
 
-            # Extract removed labels from the issue if available
-            removed_labels = [label['name'] for label in issue.get('labels', []) if label['name'].lower() in (label_data['name'].lower() for label_data in labels_data)]
-
-            if removed_labels:
-                print(f"Re-adding labels to issue #{issue_number} in repo {repo}: {removed_labels}")
-                read_labels(repo, issue_number, {"labels": removed_labels})
+                    if removed_labels:
+                        print(f"Re-adding labels: {removed_labels}")
+                        read_labels(repo, issue_number, {"labels": removed_labels})
+                    else:
+                        print("No labels to re-add")
+                except Exception as e:
+                    print(f"Error processing issue: {e}")
+        else:
+            print(f"Failed to fetch issues in repo {repo}. Status code: {issues_response.status_code}")
+            print(issues_response.text)
 
 if __name__ == "__main__":
     main()
