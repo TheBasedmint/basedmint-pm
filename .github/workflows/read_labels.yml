@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  readd_labels:
+  read_labels:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install requests
-        pip install yaml
 
     - name: Run read_labels script
       run: python read_labels.py
