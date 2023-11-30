@@ -24,6 +24,6 @@ jobs:
         pip install requests
 
     - name: Run read_labels script
-      run: python read_labels.py
+      run: python .github/scripts/ read_labels.py
       env:
         GITHUB_TOKEN: ${{ secrets.SYNC_LABELS2 }}
