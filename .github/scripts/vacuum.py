@@ -12,7 +12,7 @@ token = os.getenv("GH_PAT")
 # Calculate the datetime 48 hours ago from now
 time_threshold = datetime.utcnow() - timedelta(hours=48)
 
-# Create a dictionary to store unique issues based on issue URL
+# Create a dictionary to store unique issues based on the combination of issue URL and label name
 unique_issues = {}
 
 # Iterate through each repository
@@ -41,9 +41,12 @@ for repository in repositories:
             issue_url = event.get('issue', {}).get('html_url')
 
             if actor_login and label_name and label_color and issue_url:
-                # Check if the issue URL is not already in the dictionary
-                if issue_url not in unique_issues:
-                    unique_issues[issue_url] = {
+                # Use a unique identifier for each issue-label combination
+                unique_identifier = f"{issue_url}_{label_name}"
+
+                # Check if the unique identifier is not already in the dictionary
+                if unique_identifier not in unique_issues:
+                    unique_issues[unique_identifier] = {
                         'login': actor_login,
                         'label_name': label_name,
                         'label_color': label_color,
