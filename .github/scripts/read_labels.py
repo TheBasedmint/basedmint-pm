@@ -27,7 +27,7 @@ def read_labels(repo, issue_number, labels):
 
 def main():
     # Path to the labels YAML file
-    labels_file = 'labels.yml'
+    labels_file = '.github/scripts/labels.yml'
 
     # Load labels from YAML file
     labels_data = load_labels_yaml(labels_file)
