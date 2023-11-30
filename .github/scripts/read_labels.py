@@ -10,7 +10,7 @@ def get_github_token():
     # Ensure you have a GitHub token set as a secret in your repository
     return os.environ.get("GITHUB_TOKEN")
 
-def readd_labels(repo, issue_number, labels):
+def read_labels(repo, issue_number, labels):
     headers = {
         "Authorization": f"Bearer {get_github_token()}",
         "Accept": "application/vnd.github.v3+json"
@@ -51,7 +51,7 @@ def main():
 
             if removed_labels:
                 print(f"Re-adding labels to issue #{issue_number} in repo {repo}: {removed_labels}")
-                readd_labels(repo, issue_number, {"labels": removed_labels})
+                read_labels(repo, issue_number, {"labels": removed_labels})
 
 if __name__ == "__main__":
     main()
