@@ -25,9 +25,10 @@ jobs:
 
       - name: Run Vacuum script
         run: |
-          python vacuum.py
+          python .github/scripts/vacuum.py
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
+        working-directory: ${{ github.workspace }}
 
       - name: Upload issue events as artifact
         uses: actions/upload-artifact@v2
