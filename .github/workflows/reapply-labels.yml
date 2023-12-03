@@ -1,10 +1,9 @@
 name: Reapply-Labels
 
 on:
-  workflow_run:
-    workflows: ["collect-created-and-deleted-labels"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   reapply-labels:
