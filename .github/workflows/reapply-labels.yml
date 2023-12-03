@@ -25,6 +25,6 @@ jobs:
 
       - name: Reapply Labels
         run: |
-          python reapply_labels.py  # Replace with the actual script name
+          python .github/scripts/reapply_labels.py  # Replace with the actual script name
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
