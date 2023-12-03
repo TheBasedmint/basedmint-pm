@@ -1,0 +1,31 @@
+name: Reapply-Labels
+
+on:
+  workflow_run:
+    workflows: ["collect-created-and-deleted-labels"]
+    types:
+      - completed
+
+jobs:
+  reapply-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjust based on your project's requirements
+
+      - name: Reapply Labels
+        run: |
+          python reapply_labels.py  # Replace with the actual script name
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
