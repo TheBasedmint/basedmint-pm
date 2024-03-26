@@ -25,4 +25,4 @@ jobs:
             TheBasedmint/test2
             TheBasedmint/test3
           token: ${{ secrets.SYNC_LABELS2 }}
-          prune: true
+          prune: false
